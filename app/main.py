@@ -1,7 +1,8 @@
-
 import pyodbc
 from fastapi import FastAPI
 from pydantic import BaseModel
+class Task(BaseModel):
+    title: str
 
 
 def get_db_connection():
@@ -15,3 +16,17 @@ def get_db_connection():
     )
 
     return pyodbc.connect(connection_string)
+
+
+app = FastAPI()
+
+
+@app.get("/")
+def home():
+    return {
+        "project": "Mission Ultron",
+        "status": "online"
+    }
+@app.post("/tasks")
+def create_task(task: Task):
+    return {"message": "Task received", "title": task.title}
